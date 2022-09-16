@@ -90,11 +90,16 @@ optional_policy(`
 # keylime agent policy
 #
 #work with /var/lib/keylime/secure
-allow keylime_agent_t self:capability { chown dac_override dac_read_search setgid setuid sys_nice sys_ptrace };
+allow keylime_agent_t self:capability { audit_write chown dac_override dac_read_search net_admin setgid setuid sys_nice sys_ptrace sys_resource };
 allow keylime_agent_t self:chr_file getattr;
+allow keylime_agent_t self:process { setrlimit setsched };
+allow keylime_agent_t self:unix_dgram_socket create_stream_socket_perms;
 
 #FIX ME, add to tabrmd policy interface related with this
 allow keylime_agent_t domain:unix_stream_socket rw_stream_socket_perms; #selint-disable:W-001
+
+allow keylime_agent_t self:netlink_audit_socket { create nlmsg_relay read write };
+allow keylime_agent_t self:netlink_route_socket { bind create getattr nlmsg_read read write };
 
 dev_rw_tpm(keylime_agent_t)
 
@@ -107,6 +112,9 @@ fs_mount_tmpfs(keylime_agent_t)
 fs_setattr_tmpfs_dirs(keylime_agent_t)
 
 init_dontaudit_stream_connect(keylime_agent_t)
+init_read_utmp(keylime_agent_t)
+
+logging_send_syslog_msg(keylime_agent_t)
 
 kernel_read_all_proc(keylime_agent_t)
 
@@ -114,12 +122,15 @@ userdom_dontaudit_search_user_home_dirs(keylime_agent_t)
 userdom_read_user_tmp_files(keylime_agent_t)
 
 auth_read_passwd(keylime_agent_t)
+auth_tunable_read_shadow(keylime_agent_t)
 
 keylime_mounton_var_lib(keylime_agent_t)
 
 mount_domtrans(keylime_agent_t)
 
 selinux_read_policy(keylime_agent_t)
+
+sudo_exec(keylime_agent_t)
 
 optional_policy(`
         #FIX ME, add to tabrmd policy interface related with this
@@ -135,3 +146,4 @@ optional_policy(`
 optional_policy(`
         systemd_userdbd_stream_connect(keylime_agent_t)
 ')
+
