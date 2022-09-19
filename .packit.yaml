@@ -1,0 +1,8 @@
+jobs:
+- job: tests
+  trigger: pull_request
+  metadata:
+    targets:
+    - fedora-stable
+    - fedora-rawhide
+    skip_build: true
