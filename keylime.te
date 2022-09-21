@@ -57,6 +57,9 @@ miscfiles_read_generic_certs(keylime_domain)
 
 sysnet_read_config(keylime_domain)
 
+userdom_exec_user_tmp_files(keylime_domain)
+userdom_manage_user_tmp_dirs(keylime_domain)
+userdom_manage_user_tmp_files(keylime_domain)
 
 ########################################
 #
@@ -111,7 +114,6 @@ init_dontaudit_stream_connect(keylime_agent_t)
 kernel_read_all_proc(keylime_agent_t)
 
 userdom_dontaudit_search_user_home_dirs(keylime_agent_t)
-userdom_read_user_tmp_files(keylime_agent_t)
 
 auth_read_passwd(keylime_agent_t)
 
@@ -134,4 +136,5 @@ optional_policy(`
 
 optional_policy(`
         systemd_userdbd_stream_connect(keylime_agent_t)
+        systemd_machined_stream_connect(keylime_agent_t)
 ')
