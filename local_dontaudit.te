@@ -1,0 +1,13 @@
+policy_module(local_dontaudit, 1.0)
+require {
+type systemd_gpt_generator_t;
+type syslogd_t;
+type var_log_t;
+type fixed_disk_device_t;
+}
+
+
+
+dontaudit syslogd_t var_log_t:file { relabelfrom relabelto };
+dontaudit systemd_gpt_generator_t systemd_gpt_generator_t:capability sys_admin;
+dontaudit systemd_gpt_generator_t fixed_disk_device_t:blk_file write;
