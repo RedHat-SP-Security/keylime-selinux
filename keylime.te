@@ -112,6 +112,7 @@ fs_setattr_tmpfs_dirs(keylime_agent_t)
 init_dontaudit_stream_connect(keylime_agent_t)
 
 kernel_read_all_proc(keylime_agent_t)
+kernel_stream_connect(keylime_agent_t)
 
 userdom_dontaudit_search_user_home_dirs(keylime_agent_t)
 
