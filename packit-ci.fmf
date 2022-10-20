@@ -2,9 +2,6 @@
 
   summary: run keylime e2e tests on fedora branch
 
-  environment+:
-    KEYLIME_TEST_DISABLE_REVOCATION: 1
-
   context:
     swtpm: yes
     agent: python
@@ -29,10 +26,10 @@
      # change IMA policy to simple and run one attestation scenario
      # this is to utilize also a different parser
      - /setup/configure_kernel_ima_module/ima_policy_simple
+     - /setup/inject_SELinux_AVC_check
      - /functional/basic-attestation-on-localhost
      # now change IMA policy to signing and run all tests
      - /setup/configure_kernel_ima_module/ima_policy_signing
-     - /setup/inject_SELinux_AVC_check
      - /functional/basic-attestation-on-localhost
      - /functional/basic-attestation-with-custom-certificates
      - /functional/basic-attestation-with-ima-signatures 
@@ -49,11 +46,6 @@
      - /functional/db-mysql-sanity-on-localhost
      - /functional/tenant-allowlist-sanity
      - /functional/measured-boot-swtpm-sanity
-     # now set zeromq as a default revocation notifier and test it
-     - /setup/configure_default_revocation_notifier/zeromq
-     - /functional/basic-attestation-on-localhost
-     # now set revocation notifier back to agent
-     - /setup/configure_default_revocation_notifier/agent
 
   execute:
     how: tmt
