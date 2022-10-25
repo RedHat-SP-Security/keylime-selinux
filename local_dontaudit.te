@@ -8,6 +8,6 @@ type fixed_disk_device_t;
 
 
 
-dontaudit syslogd_t var_log_t:file { relabelfrom relabelto };
-dontaudit systemd_gpt_generator_t systemd_gpt_generator_t:capability sys_admin;
-dontaudit systemd_gpt_generator_t fixed_disk_device_t:blk_file write;
+#dontaudit syslogd_t var_log_t:file { relabelfrom relabelto }; #bug2137323
+#dontaudit systemd_gpt_generator_t systemd_gpt_generator_t:capability sys_admin; #bug2137324
+#dontaudit systemd_gpt_generator_t fixed_disk_device_t:blk_file write; #bug2137324

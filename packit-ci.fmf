@@ -16,6 +16,7 @@
      - rm -f /etc/yum.repos.d/tag-repository.repo
      - make -f /usr/share/selinux/devel/Makefile local_dontaudit.pp
      - semodule -i local_dontaudit.pp
+     - setenforce 0
 
   discover:
     how: fmf
