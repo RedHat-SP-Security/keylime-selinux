@@ -20,7 +20,7 @@
   discover:
     how: fmf
     url: https://github.com/RedHat-SP-Security/keylime-tests
-    ref: fedora-main
+    ref: "@.tmt/dynamic_ref.fmf"
     test:
      - /setup/configure_tpm_emulator
      # change IMA policy to simple and run one attestation scenario
@@ -49,3 +49,8 @@
 
   execute:
     how: tmt
+  adjust:
+     - when: distro == fedora-rawhide
+       environment:
+           AVC_CHECK_AUSEARCH_PARAMS: "-se keylime"	
+       because: "On Rawhide we ignore SELinux AVCs not related to keylime"
