@@ -5,4 +5,5 @@ jobs:
     targets:
     - fedora-stable
     - fedora-rawhide
+    - centos-stream-9-x86_64
     skip_build: true
