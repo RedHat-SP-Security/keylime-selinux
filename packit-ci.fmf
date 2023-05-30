@@ -1,28 +1,54 @@
-/e2e-run-on-fedora-branch-without-revocation:
+# common test plan configuration
 
-  summary: run keylime e2e tests on fedora branch
+environment:
+  RUST_IMA_EMULATOR: 1
+  TPM_BINARY_MEASUREMENTS: /var/tmp/binary_bios_measurements
 
-  context:
-    swtpm: yes
-    agent: python
+context:
+  swtpm: yes
+  agent: rust
+  faked_measured_boot_log: yes
 
-  prepare:
-    how: shell
-    script:
-     - dnf install selinux-policy-devel -y
-     - make -f /usr/share/selinux/devel/Makefile keylime.pp
-     - semodule -i keylime.pp
-     - restorecon -R /usr/bin/ /usr/local/bin/ /var/lib/ /var/log/
-     - rm -f /etc/yum.repos.d/tag-repository.repo
-     - make -f /usr/share/selinux/devel/Makefile local_dontaudit.pp
-     - semodule -i local_dontaudit.pp
+prepare:
+ - how: shell
+   script:
+    - systemctl disable --now dnf-makecache.service || true
+    - systemctl disable --now dnf-makecache.timer || true
+    - dnf makecache
+    - dnf -y update tpm2-tools tpm2-tss
+    - dnf install selinux-policy-devel -y
+    - make -f /usr/share/selinux/devel/Makefile keylime.pp
+    - semodule -i keylime.pp
+    - restorecon -R /usr/bin/ /usr/local/bin/ /var/lib/ /var/log/
+    - rm -f /etc/yum.repos.d/tag-repository.repo
+    - make -f /usr/share/selinux/devel/Makefile local_dontaudit.pp
+    - semodule -i local_dontaudit.pp
+
+execute:
+  how: tmt
+
+adjust:
+ # prepare step adjustments
+ - when: distro == centos-stream-9
+   prepare+:
+    - how: shell
+      order: 30
+      script:
+       - rpm -Uv https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
+
+
+/e2e-without-revocation:
+
+  summary: run keylime e2e tests
 
   discover:
     how: fmf
     url: https://github.com/RedHat-SP-Security/keylime-tests
-    ref: "@.tmt/dynamic_ref.fmf"
+    ref: main
     test:
      - /setup/configure_tpm_emulator
+     - /setup/install_upstream_keylime
+     - /setup/install_rust_keylime_from_copr
      # change IMA policy to simple and run one attestation scenario
      # this is to utilize also a different parser
      - /setup/configure_kernel_ima_module/ima_policy_simple
@@ -30,27 +56,34 @@
      - /functional/basic-attestation-on-localhost
      # now change IMA policy to signing and run all tests
      - /setup/configure_kernel_ima_module/ima_policy_signing
+     - /functional/agent_UUID_assignment_options
      - /functional/basic-attestation-on-localhost
      - /functional/basic-attestation-with-custom-certificates
-     - /functional/basic-attestation-with-ima-signatures 
+     - /functional/basic-attestation-with-ima-signatures
      - /functional/basic-attestation-without-mtls
      - /functional/basic-attestation-with-unpriviledged-agent
-     - /functional/ek-cert-use-ek_check_script
-     - /functional/ek-cert-use-ek_handle-custom-ca_certs
-     - /functional/install-rpm-with-ima-signature
-     - /functional/keylime_tenant-commands-on-localhost
-     - /functional/keylime_tenant-ima-signature-sanity
-     - /functional/tpm_policy-sanity-on-localhost
      - /functional/db-postgresql-sanity-on-localhost
      - /functional/db-mariadb-sanity-on-localhost
      - /functional/db-mysql-sanity-on-localhost
-     - /functional/tenant-allowlist-sanity
+     - /functional/durable-attestion-sanity-on-localhost
+     - /functional/ek-cert-use-ek_check_script
+     - /functional/ek-cert-use-ek_handle-custom-ca_certs
+     - /functional/install-rpm-with-ima-signature
+     - /functional/keylime-non-default-ports
+     - /functional/keylime_tenant-commands-on-localhost
+     - /functional/keylime_tenant-ima-signature-sanity
      - /functional/measured-boot-swtpm-sanity
+     - /functional/service-logfiles-logging
+     - /functional/tenant-runtime-policy-sanity
+     - /functional/tpm-issuer-cert-using-ecc
+     - /functional/tpm_policy-sanity-on-localhost
+     - /functional/use-multiple-ima-sign-verification-keys
+     - /upstream/run_keylime_tests
 
   execute:
     how: tmt
   adjust:
      - when: distro == fedora-rawhide
-       environment:
+       environment+:
            AVC_CHECK_AUSEARCH_PARAMS: "-se keylime"	
        because: "On Rawhide we ignore SELinux AVCs not related to keylime"
