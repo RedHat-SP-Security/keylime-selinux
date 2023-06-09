@@ -44,8 +44,8 @@ files_var_lib_filetrans(keylime_domain, keylime_var_lib_t, { dir file lnk_file }
 corecmd_exec_bin(keylime_domain)
 
 corenet_tcp_bind_generic_node(keylime_domain)
-corenet_tcp_bind_all_ports(keylime_domain)
-corenet_tcp_connect_all_unreserved_ports(keylime_domain)
+corenet_tcp_connect_keylime_port(keylime_domain)
+corenet_tcp_bind_keylime_port(keylime_domain)
 
 dev_read_sysfs(keylime_domain)
 
@@ -60,6 +60,13 @@ sysnet_read_config(keylime_domain)
 userdom_exec_user_tmp_files(keylime_domain)
 userdom_manage_user_tmp_dirs(keylime_domain)
 userdom_manage_user_tmp_files(keylime_domain)
+
+#several used default ports for keylime have label as milter_port_t
+#use milter_port interfaces to allow connecting of default keylime ports in policy
+optional_policy(`
+	corenet_tcp_bind_milter_port(keylime_domain)
+	corenet_tcp_connect_milter_port(keylime_domain)
+')
 
 optional_policy(`
         gpg_exec(keylime_domain)
