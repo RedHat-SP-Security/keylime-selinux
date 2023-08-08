@@ -4,7 +4,7 @@ jobs:
   branch: main
   targets:
     - fedora-stable
-#    - fedora-rawhide
+    - fedora-rawhide
     - centos-stream-9-x86_64
   skip_build: true
   tf_extra_params:
@@ -16,21 +16,12 @@ jobs:
   trigger: pull_request
   branch: rhel-9-main
   targets:
-    - centos-stream-9-x86_64
+    centos-stream-9-x86_64:
+        distros: [RHEL-9.3.0-Nightly]
+  use_internal_tf: True
   skip_build: true
   tf_extra_params:
     environments:
       - tmt:
           context:
             target_PR_branch: "rhel-9-main"
-- job: tests
-  trigger: pull_request
-  branch: fedora-main
-  targets:
-    - fedora-stable
-  skip_build: true
-  tf_extra_params:
-    environments:
-      - tmt:
-          context:
-            target_PR_branch: "fedora-main"
