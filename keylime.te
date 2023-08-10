@@ -83,6 +83,10 @@ allow keylime_server_t self:udp_socket create_stream_socket_perms;
 manage_dirs_pattern(keylime_server_t, keylime_log_t, keylime_log_t)
 manage_files_pattern(keylime_server_t, keylime_log_t, keylime_log_t)
 
+corenet_tcp_connect_http_cache_port(keylime_server_t)
+corenet_tcp_connect_mysqld_port(keylime_server_t)
+corenet_tcp_connect_postgresql_port(keylime_server_t)
+
 fs_getattr_all_fs(keylime_server_t)
 fs_rw_inherited_tmpfs_files(keylime_server_t)
 
