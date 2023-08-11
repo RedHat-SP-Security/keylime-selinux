@@ -16,7 +16,7 @@ prepare:
     - systemctl disable --now dnf-makecache.timer || true
     - dnf makecache
     - dnf -y update tpm2-tools tpm2-tss
-    - dnf install selinux-policy-devel -y
+    - dnf install selinux-policy-devel tpm2-abrmd-selinux -y
     - make -f /usr/share/selinux/devel/Makefile keylime.pp
     - semodule -i keylime.pp
     - restorecon -R /usr/bin/ /usr/local/bin/ /var/lib/ /var/log/
