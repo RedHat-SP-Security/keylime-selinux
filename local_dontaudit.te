@@ -4,6 +4,14 @@ type systemd_gpt_generator_t;
 type syslogd_t;
 type var_log_t;
 type fixed_disk_device_t;
+
+# RHEL-37631
+type init_t;
+type systemd_fstab_generator_t;
+type nfsd_t;
+type systemd_gpt_generator_t;
+type systemd_rc_local_generator_t;
+type systemd_sysv_generator_t;
 }
 
 
@@ -11,3 +19,10 @@ type fixed_disk_device_t;
 dontaudit syslogd_t var_log_t:file { relabelfrom relabelto };
 dontaudit systemd_gpt_generator_t systemd_gpt_generator_t:capability sys_admin;
 dontaudit systemd_gpt_generator_t fixed_disk_device_t:blk_file write;
+
+# workaround known issue https://issues.redhat.com/browse/RHEL-37631
+dontaudit nfsd_t init_t:bpf {map_read map_write};
+dontaudit systemd_fstab_generator_t init_t:bpf {map_read map_write};
+dontaudit systemd_gpt_generator_t init_t:bpf {map_read map_write};
+dontaudit systemd_rc_local_generator_t init_t:bpf {map_read map_write};
+dontaudit systemd_sysv_generator_t init_t:bpf {map_read map_write};
