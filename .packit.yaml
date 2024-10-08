@@ -5,7 +5,7 @@ jobs:
   targets:
     - fedora-stable
     - fedora-rawhide
-    - centos-stream-9-x86_64
+    - centos-stream-10-x86_64
   skip_build: true
   tf_extra_params:
     environments:
@@ -17,7 +17,7 @@ jobs:
   branch: rhel-9-main
   targets:
     centos-stream-9-x86_64:
-        distros: [RHEL-9.3.0-Nightly]
+        distros: [RHEL-9.4.0-Nightly]
   use_internal_tf: True
   skip_build: true
   tf_extra_params:

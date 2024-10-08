@@ -129,6 +129,7 @@ kernel_stream_connect(keylime_agent_t)
 userdom_dontaudit_search_user_home_dirs(keylime_agent_t)
 
 auth_read_passwd(keylime_agent_t)
+auth_use_nsswitch(keylime_agent_t)
 
 keylime_mounton_var_lib(keylime_agent_t)
 
