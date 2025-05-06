@@ -110,9 +110,6 @@ optional_policy(`
 allow keylime_agent_t self:capability { chown dac_override dac_read_search setgid setuid sys_nice sys_ptrace };
 allow keylime_agent_t self:chr_file getattr;
 
-#FIX ME, add to tabrmd policy interface related with this
-allow keylime_agent_t domain:unix_stream_socket rw_stream_socket_perms; #selint-disable:W-001
-
 dev_rw_tpm(keylime_agent_t)
 
 exec_files_pattern(keylime_agent_t, keylime_var_lib_t, keylime_var_lib_t)
@@ -140,12 +137,6 @@ mount_domtrans(keylime_agent_t)
 selinux_read_policy(keylime_agent_t)
 
 optional_policy(`
-        #FIX ME, add to tabrmd policy interface related with this
-        #https://github.com/tpm2-software/tpm2-abrmd/blob/master/selinux
-        dbus_chat_system_bus(keylime_agent_t)
-')
-
-optional_policy(`
         dbus_stream_connect_system_dbusd(keylime_agent_t)
         dbus_system_bus_client(keylime_agent_t)
 ')
@@ -153,4 +144,9 @@ optional_policy(`
 optional_policy(`
         systemd_userdbd_stream_connect(keylime_agent_t)
         systemd_machined_stream_connect(keylime_agent_t)
+')
+
+optional_policy(`
+        tabrmd_create_unix_stream_sockets(keylime_agent_t)
+        tabrmd_dbus_chat(keylime_agent_t)
 ')
