@@ -17,9 +17,6 @@ keylime_use_keylime_domain(keylime_server_t)
 type keylime_server_exec_t;
 init_daemon_domain(keylime_server_t, keylime_server_exec_t)
 
-type keylime_log_t;
-logging_log_file(keylime_log_t)
-
 type keylime_var_lib_t;
 files_type(keylime_var_lib_t)
 
@@ -79,9 +76,6 @@ optional_policy(`
 
 allow keylime_server_t self:netlink_route_socket { create_stream_socket_perms nlmsg_read };
 allow keylime_server_t self:udp_socket create_stream_socket_perms;
-
-manage_dirs_pattern(keylime_server_t, keylime_log_t, keylime_log_t)
-manage_files_pattern(keylime_server_t, keylime_log_t, keylime_log_t)
 
 fs_dontaudit_search_cgroup_dirs(keylime_server_t)
 

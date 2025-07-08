@@ -20,5 +20,3 @@
 
 /var/lib/keylime(/.*)?		gen_context(system_u:object_r:keylime_var_lib_t,s0)
 /var/lib/keylime-agent(/.*)?		gen_context(system_u:object_r:keylime_var_lib_t,s0)
-
-/var/log/keylime(/.*)?		gen_context(system_u:object_r:keylime_log_t,s0)
