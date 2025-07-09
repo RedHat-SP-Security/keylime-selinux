@@ -74,6 +74,7 @@ optional_policy(`
 # keylime server policy
 #
 
+allow keylime_server_t self:key { read write };
 allow keylime_server_t self:netlink_route_socket { create_stream_socket_perms nlmsg_read };
 allow keylime_server_t self:udp_socket create_stream_socket_perms;
 
