@@ -77,6 +77,8 @@ optional_policy(`
 allow keylime_server_t self:key { create read setattr view write };
 allow keylime_server_t self:netlink_route_socket { create_stream_socket_perms nlmsg_read };
 allow keylime_server_t self:udp_socket create_stream_socket_perms;
+allow keylime_server_t keylime_tmp_t:sock_file { create write };
+allow keylime_server_t self:unix_stream_socket connectto;
 
 fs_dontaudit_search_cgroup_dirs(keylime_server_t)
 
