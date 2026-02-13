@@ -81,6 +81,9 @@ allow keylime_server_t keylime_tmp_t:sock_file { create write };
 allow keylime_server_t self:unix_stream_socket connectto;
 
 fs_dontaudit_search_cgroup_dirs(keylime_server_t)
+fs_read_cgroup_files(keylime_server_t)
+
+kernel_read_net_sysctls(keylime_server_t)
 
 corenet_tcp_connect_http_cache_port(keylime_server_t)
 corenet_tcp_connect_mysqld_port(keylime_server_t)
@@ -96,6 +99,8 @@ optional_policy(`
 
 optional_policy(`
         sssd_run_stream_connect(keylime_server_t)
+        sssd_read_public_files(keylime_server_t)
+        sssd_search_lib(keylime_server_t)
 ')
 
 
