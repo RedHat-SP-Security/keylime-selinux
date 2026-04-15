@@ -23,6 +23,9 @@ files_type(keylime_var_lib_t)
 type keylime_tmp_t;
 files_tmp_file(keylime_tmp_t)
 
+type keylime_var_run_t;
+files_pid_file(keylime_var_run_t)
+
 ########################################
 #
 # keylime domain policy
@@ -79,6 +82,11 @@ allow keylime_server_t self:netlink_route_socket { create_stream_socket_perms nl
 allow keylime_server_t self:udp_socket create_stream_socket_perms;
 allow keylime_server_t keylime_tmp_t:sock_file { create write };
 allow keylime_server_t self:unix_stream_socket connectto;
+
+# Allow keylime_server_t to manage runtime directory and sockets in /run/keylime/
+manage_dirs_pattern(keylime_server_t, keylime_var_run_t, keylime_var_run_t)
+manage_sock_files_pattern(keylime_server_t, keylime_var_run_t, keylime_var_run_t)
+files_pid_filetrans(keylime_server_t, keylime_var_run_t, { dir sock_file })
 
 fs_dontaudit_search_cgroup_dirs(keylime_server_t)
 fs_read_cgroup_files(keylime_server_t)
