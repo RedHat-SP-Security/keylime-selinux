@@ -92,6 +92,7 @@ fs_dontaudit_search_cgroup_dirs(keylime_server_t)
 fs_read_cgroup_files(keylime_server_t)
 
 kernel_read_net_sysctls(keylime_server_t)
+kernel_read_network_state(keylime_server_t)
 
 corenet_tcp_connect_http_cache_port(keylime_server_t)
 corenet_tcp_connect_mysqld_port(keylime_server_t)
