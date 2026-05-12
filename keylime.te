@@ -136,6 +136,8 @@ fs_setattr_tmpfs_dirs(keylime_agent_t)
 
 init_dontaudit_stream_connect(keylime_agent_t)
 
+logging_send_syslog_msg(keylime_agent_t)
+
 kernel_read_all_proc(keylime_agent_t)
 kernel_stream_connect(keylime_agent_t)
 
